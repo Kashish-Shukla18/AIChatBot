@@ -20,8 +20,7 @@ export const loginValidator = [
 ];
 export const signupValidator = [
     body("name").notEmpty().withMessage("Name is Required"),
-    body("email").trim().isEmail().withMessage("Email is Required"),
-    body("password").trim().isLength({ min: 6 }).withMessage("Passwod should contain alteast 6 characters"),
+    ...loginValidator,
 ];
 // export default validate,signupValidator;
 //# sourceMappingURL=validators.js.map

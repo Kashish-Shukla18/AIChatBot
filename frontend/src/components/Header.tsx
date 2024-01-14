@@ -1,9 +1,9 @@
 import { AppBar, Toolbar } from '@mui/material';
 import Logo from './shared/Logo';
-import { userAuth } from '../context/AuthContext';
+import { UserAuth } from '../context/AuthContext';
 import NavigationLink from './shared/NavigationLink';
 const Header = () => {
-  const auth = userAuth();
+  const auth = UserAuth();
   return (
     <div>
       <AppBar sx={{ bgcolor: "transparent", position: "static", boxShadow: "none" }}>
