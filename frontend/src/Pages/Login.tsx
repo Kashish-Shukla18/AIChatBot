@@ -5,21 +5,24 @@ import CustomisedInput from "../components/shared/CustomisedInput";
 import { toast } from "react-hot-toast";
 import { UserAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+
+
 const Login = () => {
   const navigate = useNavigate();
   const auth = UserAuth();
 
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  const formData = new FormData(e.currentTarget);
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
-  if (!email || !password) {
-    toast.error("Please fill in all required fields", { id: "login" });
-    return;
-  }
+    if (!email || !password) {
+      toast.error("Please fill in all required fields", { id: "login" });
+      return;
+    }
+
     try {
       toast.loading("Signing In", { id: "login" });
       await auth?.login(email, password);
@@ -29,6 +32,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       toast.error("Signing In Failed", { id: "login" });
     }
   };
+
   useEffect(() => {
     if (auth?.user) {
       navigate("/chat");

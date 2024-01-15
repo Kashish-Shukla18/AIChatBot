@@ -1,43 +1,71 @@
+// AuthContext.tsx
 import { createContext, ReactNode, useState, useEffect, useContext } from "react";
-import { loginUser } from "../helpers/api-communicator";
+import { checkAuthStatus, loginUser } from "../helpers/api-communicator";
+
 type User = {
-    name: string,
-    email: string
-}
+  name: string;
+  email: string;
+};
+
 type UserAuth = {
-    isLoggedIn: boolean;
-    user: User | null;
-    login: (email: string, password: string) => Promise<void>;
-    signup: (name: string, email: string, password: string) => Promise<void>;
-    logout: () => Promise<void>;
-}
+  isLoggedIn: boolean;
+  user: User | null;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (name: string, email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+};
+
 const AuthContext = createContext<UserAuth | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    useEffect(() => {
-        // fetch if ther user's cookies are valid then skip login
-    }, []);
+  useEffect(() => {
+    // fetch if the user's cookies are valid then skip login
+    async function checkStatus() {
+      try {
+      const data=await checkAuthStatus();  
+        setUser({ email: data.email, name: data.name });
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.error("Error during Authenticate:", error);
+        throw new Error("Unable to Authenticate");
+      }
+      
+    }
+    checkStatus();
+  }, []);
 
-    const login = async (email: string, password: string) => {
-        const data = await loginUser(email, password);
-        if (data) {
-            setUser({ email: data.email, name: data.name });
-            setIsLoggedIn(true);
-        }
-    };
-    const signup = async (name: string, email: string, password: string) => { };
-    const logout = async () => { };
+  const login = async (email: string, password: string) => {
+    try {
+      const data = await loginUser(email, password);
 
-    const value = {
-        user,
-        isLoggedIn,
-        login,
-        logout,
-        signup
-    };
-    return <AuthContext.Provider value={value}>{children} </AuthContext.Provider>
-}
+      setUser({ email: data.email, name: data.name });
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.error("Error during login:", error);
+      throw new Error("Unable to login");
+    }
+  };
+
+  const signup = async (name: string, email: string, password: string) => {
+    // Implement signup logic if needed
+  };
+
+  const logout = async () => {
+    // Implement logout logic if needed
+  };
+
+  const value = {
+    user,
+    isLoggedIn,
+    login,
+    logout,
+    signup,
+  };
+
+  return <AuthContext.Provider value={value}>{children} </AuthContext.Provider>;
+};
+
 export const UserAuth = () => useContext(AuthContext);
