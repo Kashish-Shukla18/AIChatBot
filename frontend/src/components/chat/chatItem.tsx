@@ -1,7 +1,7 @@
-import React from "react";
+// import React from "react";
 import { Box, Avatar, Typography } from "@mui/material";
 import { UserAuth } from "../../context/AuthContext";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import { coldarkDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 function extractCodeFromString(message: string) {
@@ -60,7 +60,9 @@ const ChatItem = ({
               <SyntaxHighlighter style={coldarkDark} language="javascript">
                 {block}
               </SyntaxHighlighter>
+
             ) : (
+              
               <Typography sx={{ fontSize: "20px" }}>{block}</Typography>
             )
           )}
