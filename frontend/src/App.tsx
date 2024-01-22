@@ -1,23 +1,26 @@
 import Header from "./components/Header";
-import Home from "./Pages/Home"
-import { Routes,Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import Home from "./Pages/Home";
 import Login from "./Pages/Login";
-import SignUp from "./Pages/SignUp";
+import Signup from "./Pages/SignUp";
 import Chat from "./Pages/Chat";
-import NotFound from "./Pages/NotFound";
+import { useAuth } from "./context/AuthContext";
+
 function App() {
+  const auth = useAuth();
 
   return (
-    <>
-      <Header/>
+   <main>
+      <Header />
       <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/signup" element={<SignUp/>}/>
-        <Route path="/chat" element={<Chat/>}/>
-        <Route path="*" element={<NotFound/>}/>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        {auth?.isLoggedIn && auth.user && (
+          <Route path="/chat" element={<Chat />} />
+        )}
       </Routes>
-    </>
+   </main>
   )
 }
 

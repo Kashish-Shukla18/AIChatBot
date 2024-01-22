@@ -15,15 +15,14 @@ export const validate = (validations) => {
     };
 };
 export const loginValidator = [
-    body("email").trim().isEmail().withMessage("Email is Required"),
-    body("password").trim().isLength({ min: 6 }).withMessage("Passwod should contain alteast 6 characters"),
+    body("email").trim().isEmail().withMessage("Email is required"),
+    body("password").trim().isLength({ min: 6 }).withMessage("Password should contain atleast 6 characters"),
 ];
 export const signupValidator = [
-    body("name").notEmpty().withMessage("Name is Required"),
+    body("name").notEmpty().withMessage("Name Is Required"),
     ...loginValidator,
 ];
 export const chatCompletionValidator = [
-    body("message").notEmpty().withMessage("Message is Required"),
+    body("message").notEmpty().withMessage("Message Is Required"),
 ];
-// export default validate,signupValidator;
 //# sourceMappingURL=validators.js.map

@@ -1,50 +1,42 @@
 import React, { useEffect } from "react";
 import { IoIosLogIn } from "react-icons/io";
 import { Box, Typography, Button } from "@mui/material";
-import CustomisedInput from "../components/shared/CustomisedInput";
+import CustomizedInput from "../components/shared/CustomisedInput";
 import { toast } from "react-hot-toast";
-import { UserAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-
-const SignUp = () => {
+const Signup = () => {
+  const auth = useAuth();
   const navigate = useNavigate();
-  const auth = UserAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const formData = new FormData(e.currentTarget);
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    if (!email || !password) {
-      toast.error("Please fill in all required fields", { id: "signup" });
-      return;
-    }
-
     try {
       toast.loading("Signing Up", { id: "signup" });
-      await auth?.signup(name,email, password);
+      await auth?.signup(name, email, password);
       toast.success("Signed Up Successfully", { id: "signup" });
     } catch (error) {
-      console.error("Error during signup:", error);
-      toast.error("Signing Ups Failed", { id: "signup" });
+      console.log(error);
+      toast.error("Signing Up Failed", { id: "signup" });
     }
   };
 
   useEffect(() => {
-    if (auth?.user) {
-      navigate("/chat");
+    if(auth?.user){
+      return navigate("/chat");
     }
-  }, [auth]);
-
-
+  }, [auth])
+  
   return (
     <Box width={"100%"} height={"100%"} display="flex" flex={1}>
-      <Box padding={8} mt={8} display={{ md: "flex", sm: "none", xs: "none" }}>
-        <img src="airobot.png" alt="Robot" style={{ width: "400px" }} />
+      <Box display={{ md: "flex", sm: "none", xs: "none" }}>
+        <img src="Robots.webp" alt="Robots" style={{ width: "800px" }} />
       </Box>
       <Box
         display={"flex"}
@@ -52,14 +44,14 @@ const SignUp = () => {
         justifyContent={"center"}
         alignItems={"center"}
         padding={2}
-        ml={"auto"}
-        mt={16}
+        ml={"100px"}
+        mt={6}
       >
         <form
           onSubmit={handleSubmit}
           style={{
-            margin: "auto",
-            padding: "30px",
+            margin: "50px",
+            padding: "40px",
             boxShadow: "10px 10px 20px #000",
             borderRadius: "10px",
             border: "none",
@@ -75,14 +67,14 @@ const SignUp = () => {
             <Typography
               variant="h4"
               textAlign="center"
-              padding={2}
+              padding={3}
               fontWeight={600}
             >
-              SignUp
+              Signup
             </Typography>
-            <CustomisedInput type="text" name="name" label="Name" />
-            <CustomisedInput type="email" name="email" label="Email" />
-            <CustomisedInput type="password" name="password" label="Password" />
+            <CustomizedInput type="text" name="name" label="Name" />
+            <CustomizedInput type="email" name="email" label="Email" />
+            <CustomizedInput type="password" name="password" label="Password" />
             <Button
               type="submit"
               sx={{
@@ -99,7 +91,7 @@ const SignUp = () => {
               }}
               endIcon={<IoIosLogIn />}
             >
-              SignUp
+              Signup
             </Button>
           </Box>
         </form>
@@ -108,4 +100,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Signup;

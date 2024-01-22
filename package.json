@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "react-syntax-highlighter": "^15.5.0"
+    "axios": "^1.6.5"
   }
 }

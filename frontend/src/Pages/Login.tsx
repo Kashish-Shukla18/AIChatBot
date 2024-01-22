@@ -1,45 +1,32 @@
 import React, { useEffect } from "react";
 import { IoIosLogIn } from "react-icons/io";
 import { Box, Typography, Button } from "@mui/material";
-import CustomisedInput from "../components/shared/CustomisedInput";
+import CustomizedInput from "../components/shared/CustomisedInput";
 import { toast } from "react-hot-toast";
-import { UserAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-
-
 const Login = () => {
   const navigate = useNavigate();
-  const auth = UserAuth();
-
+  const auth = useAuth();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-
-    if (!email || !password) {
-      toast.error("Please fill in all required fields", { id: "login" });
-      return;
-    }
-
     try {
       toast.loading("Signing In", { id: "login" });
       await auth?.login(email, password);
       toast.success("Signed In Successfully", { id: "login" });
     } catch (error) {
-      console.error("Error during login:", error);
+      console.log(error);
       toast.error("Signing In Failed", { id: "login" });
     }
   };
-
   useEffect(() => {
     if (auth?.user) {
-      navigate("/chat");
+      return navigate("/chat");
     }
   }, [auth]);
-
-
   return (
     <Box width={"100%"} height={"100%"} display="flex" flex={1}>
       <Box padding={8} mt={8} display={{ md: "flex", sm: "none", xs: "none" }}>
@@ -79,8 +66,8 @@ const Login = () => {
             >
               Login
             </Typography>
-            <CustomisedInput type="email" name="email" label="Email" />
-            <CustomisedInput type="password" name="password" label="Password" />
+            <CustomizedInput type="email" name="email" label="Email" />
+            <CustomizedInput type="password" name="password" label="Password" />
             <Button
               type="submit"
               sx={{
